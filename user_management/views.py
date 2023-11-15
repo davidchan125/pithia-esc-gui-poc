@@ -36,7 +36,7 @@ from common.forms import InstitutionForLoginSessionForm
 from pithiaesc.settings import BASE_DIR
 
 
-JOIN_AN_INSTITUTION_PAGE_TITLE = 'Join an Institution'
+JOIN_AN_INSTITUTION_PAGE_TITLE = 'Join a PITHIA Institution'
 
 
 # Create your views here.
@@ -224,11 +224,11 @@ def choose_institution_for_login_session(request):
             is_institution_for_login_session_set = get_institution_id_for_login_session(request.session)
             changed_or_set = 'changed' if is_institution_for_login_session_set else 'set'
             set_institution_for_login_session(request.session, institution, subgroup)
-            success_msg = f'Institution {changed_or_set} to {institution}.'
+            success_msg = f'PITHIA Institution {changed_or_set} to {institution}.'
             messages.success(request, success_msg)
             if not is_institution_for_login_session_set:
                 user_icon_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>'
-                info_msg = f'You can switch to another institution from the {user_icon_svg} menu in the navigation bar.'
+                info_msg = f'You can switch to another PITHIA institution from the {user_icon_svg} menu in the navigation bar.'
                 messages.info(request, info_msg)
         else:
             messages.error(request, 'The form submitted was invalid.')

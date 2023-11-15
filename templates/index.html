@@ -11,16 +11,16 @@
                     {% if not request.session.user_institution_subgroups %}
                     <div class="p-md-3">
                         <p class="mb-4">
-                            You must be a member of an e-Science Centre
-                            institution to enable content management
-                            features for this account.
+                            You must be a member of a PITHIA institution
+                            to enable content management features for this
+                            account.
                         </p>
                         <div class="d-flex flex-wrap justify-content-lg-start justify-content-center">
                             <a href="{% url 'list_joinable_perun_organisations' %}" class="btn btn-primary mx-1 ms-lg-0 me-lg-1 my-1">
-                                Join an Existing Institution
+                                Join an Existing PITHIA Institution
                             </a>
                             <a href="{{ create_institution_url }}" class="btn btn-secondary mx-1 ms-lg-1 me-lg-0 my-1">
-                                Register a New Institution
+                                Register a New PITHIA Institution
                             </a>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
                     <div class="p-md-2 d-flex align-items-start">
                         <div>
                             <p>
-                                Select which institution you would like to set for this login session (this can be changed later from the
+                                Select which PITHIA institution you would like to set for this login session (this can be changed later from the
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                                 </svg> menu).
@@ -49,7 +49,7 @@
                                     {% endfor %}
                                 </select>
                                 <small class="form-text d-block mb-3">Data management features will be enabled for the chosen institution.</small>
-                                <button type="submit" class="btn btn-primary">Edit with this institution</button>
+                                <button type="submit" class="btn btn-primary">Edit with this PITHIA institution</button>
                             </form>
                         </div>
                     </div>
@@ -215,7 +215,7 @@
 {% if request.session.is_logged_in and request.session.user_institution_subgroups %}
 <hr>
 <section>
-    <h2 id="my-institutions-management" class="mb-3">My Institutions</h2>
+    <h2 id="my-institutions-management" class="mb-3">My PITHIA Institutions</h2>
     <div class="card-menu mb-2">
         <div class="card">
             <div class="card-body">
@@ -225,7 +225,7 @@
                         <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1V1Z"/>
                         <path d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z"/>
                     </svg>
-                    <span>Register a New Institution</span>
+                    <span>Register a New PITHIA Institution</span>
                 </a>
             </div>
         </div>
@@ -236,7 +236,7 @@
                         <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z"/>
                         <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z"/>
                     </svg>
-                    Join Another Institution
+                    Join Another PITHIA Institution
                 </a>
             </div>
         </div>
