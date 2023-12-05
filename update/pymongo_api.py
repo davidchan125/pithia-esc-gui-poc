@@ -59,6 +59,7 @@ def _update_with_pymongo(
     store_xml_file_as_string_and_map_to_resource_id(
         xml_file_string,
         resource_id,
+        OriginalMetadataXml,
         session=session
     )
 

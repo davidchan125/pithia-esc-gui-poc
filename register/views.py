@@ -48,6 +48,7 @@ from utils.url_helpers import create_data_subset_detail_page_url
 from . import xml_conversion_checks_and_fixes
 from .pymongo_api import register_with_pymongo_transaction_if_possible
 
+from common.mongodb_models import OriginalMetadataXml
 from handle_management.pymongo_api import add_data_subset_data_to_doi_metadata_kernel_dict_old
 from update.pymongo_api import register_doi_with_pymongo_transaction_if_possible
 from validation.errors import FileRegisteredBefore
@@ -81,7 +82,8 @@ class ResourceRegisterFormView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f'Register New {self.model.type_plural_readable.title()}'
+        context['title'] = 'Register Scientific Metadata'
+        context['resource_type_plural_readable'] = self.model.type_plural_readable.title()
         context['validation_url'] = self.validation_url
         context['post_url'] = self.post_url
         context['form'] = self.form_class
@@ -129,6 +131,7 @@ class ResourceRegisterFormView(FormView):
                         register_with_pymongo_transaction_if_possible(
                             xml_file,
                             self.resource_mongodb_model,
+                            OriginalMetadataXml,
                             api_selected=is_api_selected,
                             api_specification_url=api_specification_url,
                             api_description=api_description,
@@ -166,19 +169,24 @@ class ResourceRegisterFormView(FormView):
                                 logger.exception('A DOI has already been issued for this metadata file.')
                                 messages.error(request, f'A DOI has already been issued for this metadata file.')
                                 return super().post(request, *args, **kwargs)
-                            # Create a blank DOI dict first
+                            
+                            # Create and register a handle
+                            data_subset_url = create_data_subset_detail_page_url(self.new_registration.pk)
+                            handle, handle_api_client, credentials = create_and_register_handle_for_resource_url(data_subset_url)
+                            self.handle_api_client = handle_api_client
+                            self.handle = handle
+
+                            # Create a dict storing DOI metadata kernel information.
+                            # This information in this dict will be added to the
+                            # Handle to store data that a DOI would normally handle.
                             doi_dict = initialise_default_doi_kernel_metadata_dict()
+                            # Add the handle metadata to the DOI dict
+                            doi_dict = add_handle_data_to_doi_metadata_kernel_dict(handle, doi_dict)
                             add_data_subset_data_to_doi_metadata_kernel_dict(self.new_registration, doi_dict)
                             # TODO: remove old code
                             add_data_subset_data_to_doi_metadata_kernel_dict_old(self.new_pymongo_registration['_id'], doi_dict)
-                            # Create and register a handle
-                            data_subset_url = create_data_subset_detail_page_url(self.new_registration.pk)
-                            handle, handle_api_client, credentials = create_and_register_handle_for_resource_url(data_subset_url, initial_doi_dict_values=doi_dict)
-                            self.handle_api_client = handle_api_client
-                            self.handle = handle
-                            # Add the handle metadata to the DOI dict
-                            doi_dict = add_handle_data_to_doi_metadata_kernel_dict(handle, doi_dict)
-                            # Add the DOI dict metadata to the handle
+
+                            # Add DOI metadata kernel to Handle and Data Subset
                             add_doi_metadata_kernel_to_handle(self.handle, doi_dict, self.handle_api_client)
                             add_doi_metadata_kernel_to_data_subset(
                                 self.new_registration.pk,
@@ -186,6 +194,9 @@ class ResourceRegisterFormView(FormView):
                                 xml_file_string,
                                 owner_id
                             )
+                            # Handle to Data Subset URL mapping, to be able to
+                            # retrieve information from the Handle in case the
+                            # Data Subset ever gets deleted.
                             add_handle_to_url_mapping(handle, data_subset_url)
 
                             # TODO: remove old code
@@ -402,7 +413,6 @@ class DataCollectionRegisterFormView(ResourceRegisterFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f'Register a New {self.model.type_readable.title()}'
         context['api_specification_validation_url'] = reverse_lazy('validation:api_specification_url')
         return context
         
@@ -465,7 +475,6 @@ class CatalogueDataSubsetRegisterFormView(ResourceRegisterFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Register a New Catalogue Data Subset'
         context['resource_management_category_list_page_breadcrumb_text'] = _CATALOGUE_MANAGEMENT_INDEX_PAGE_TITLE
         context['resource_management_category_list_page_breadcrumb_url_name'] = 'resource_management:catalogue_related_metadata_index'
         return context

@@ -29,7 +29,12 @@ def register_metadata_xml_file(xml_file, mongodb_model, xml_conversion_check_and
     mongodb_model.insert_one(converted_metadata_file_dictionary, session=session)
     return converted_metadata_file_dictionary
 
-def store_xml_file_as_string_and_map_to_resource_id(xml_file_or_string: Union[InMemoryUploadedFile, str], resource_id, session=None):
+def store_xml_file_as_string_and_map_to_resource_id(
+    xml_file_or_string: Union[InMemoryUploadedFile, str],
+    resource_id,
+    original_metadata_xml_model,
+    session=None
+):
     xml_file_string = xml_file_or_string
     if hasattr(xml_file_or_string, 'read'):
         xml_file_or_string.seek(0)
@@ -40,7 +45,7 @@ def store_xml_file_as_string_and_map_to_resource_id(xml_file_or_string: Union[In
         'resourceId': ObjectId(resource_id),
         'value': xml_file_string
     }
-    OriginalMetadataXml.insert_one(original_metadata_xml, session=session)
+    original_metadata_xml_model.insert_one(original_metadata_xml, session=session)
 
 # From register_api_specification.py
 def register_api_specification(api_specification_url, data_collection_localid, api_description='', session=None):
@@ -55,6 +60,7 @@ def register_api_specification(api_specification_url, data_collection_localid, a
 def _register_with_pymongo(
     xml_file,
     resource_mongodb_model,
+    original_metadata_xml_model,
     api_selected=False,
     api_specification_url=None,
     api_description='',
@@ -71,6 +77,7 @@ def _register_with_pymongo(
     store_xml_file_as_string_and_map_to_resource_id(
         xml_file,
         registration_results['_id'],
+        original_metadata_xml_model,
         session=session
     )
     if api_selected is True:
@@ -84,6 +91,7 @@ def _register_with_pymongo(
 def register_with_pymongo_transaction_if_possible(
     xml_file,
     resource_mongodb_model,
+    original_metadata_xml_model,
     api_selected=False,
     api_specification_url=None,
     api_description='',
@@ -95,6 +103,7 @@ def register_with_pymongo_transaction_if_possible(
                 _register_with_pymongo(
                     xml_file,
                     resource_mongodb_model,
+                    original_metadata_xml_model,
                     api_selected=api_selected,
                     api_specification_url=api_specification_url,
                     api_description=api_description,
@@ -106,6 +115,7 @@ def register_with_pymongo_transaction_if_possible(
         _register_with_pymongo(
             xml_file,
             resource_mongodb_model,
+            original_metadata_xml_model,
             api_selected=api_selected,
             api_specification_url=api_specification_url,
             api_description=api_description,

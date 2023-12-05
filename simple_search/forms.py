@@ -10,7 +10,7 @@ class SimpleSearchForm(forms.Form):
         label='Search',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter a keyword...',
+            'placeholder': 'Enter a term or phrase...',
         })
     )
 

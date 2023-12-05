@@ -92,9 +92,8 @@ class MetadataFileMetadataURLReferencesValidator:
 
     @classmethod
     def _is_resource_url_structure_valid(cls, resource_url):
-        try:
-            url_base, resource_type_in_resource_url, namespace, localid = itemgetter('url_base', 'resource_type', 'namespace', 'localid')(cls._divide_resource_url_into_components(resource_url))
-        except IndexError:
+        url_base, resource_type_in_resource_url, namespace, localid = itemgetter('url_base', 'resource_type', 'namespace', 'localid')(cls._divide_resource_url_into_components(resource_url))
+        if any(comp is None for comp in [url_base, resource_type_in_resource_url, namespace, localid]):
             return False
 
         # Verify resource type in resource URL is valid

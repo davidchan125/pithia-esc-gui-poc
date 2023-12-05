@@ -15,9 +15,9 @@
 <div class="row gy-3">
     <div class="col-lg-8">
         <hgroup>
-            <h1>{{ title }}</h1>
-            <p class="text-secondary">
-                Deleting: {{ resource_to_delete.name|default:resource_to_delete.localid }}
+            <h1 class="mb-0">{{ title }}</h1>
+            <p class="text-secondary fs-3">
+                {{ resource_to_delete.name|default:resource_to_delete.localid }}
             </p>
         </hgroup>
     </div>
@@ -40,8 +40,8 @@
             </ul>
         </div>
         {% else %}
-        <div class="alert alert-info">
-            This metadata is not referred to by any other metadata and can be deleted without deleting other metadata.
+        <div class="alert alert-success">
+            This metadata is not referred to by any other metadata and can be safely deleted.
         </div>
         {% endif %}
     </div>

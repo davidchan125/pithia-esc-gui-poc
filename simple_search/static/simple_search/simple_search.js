@@ -10,3 +10,7 @@ simpleSearchForm.addEventListener("submit", event => {
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>`;
 });
+
+const popover = new bootstrap.Popover('.popover-simple-search-help', {
+    trigger: 'focus'
+});

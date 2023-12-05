@@ -1,3 +1,4 @@
+import logging
 from dateutil.parser import parse
 from django.http import JsonResponse
 from django.shortcuts import (
@@ -24,6 +25,8 @@ from handle_management.handle_api import (
 )
 from utils.dict_helpers import flatten
 from utils.mapping_functions import prepare_resource_for_template
+
+logger = logging.getLogger(__name__)
 
 _INDEX_PAGE_TITLE = 'All Scientific Metadata'
 _DATA_COLLECTION_RELATED_RESOURCE_TYPES_PAGE_TITLE = 'Data Collection-related Metadata'
@@ -601,9 +604,15 @@ class CatalogueDataSubsetDetailView(CatalogueRelatedResourceDetailView):
 
     def get(self, request, *args, **kwargs):
         self.resource_id = self.kwargs['catalogue_data_subset_id']
-        self.client, self.credentials = instantiate_client_and_load_credentials()
         self.handle = None
         self.handle_data = None
+
+        try:
+            self.client, self.credentials = instantiate_client_and_load_credentials()
+        except BaseException as e:
+            logger.exception('An unexpected error occurred whilst instantiating the PyHandle client.')
+            return super().get(request, *args, **kwargs)
+        
         try:
             handle_url_mapping = models.HandleURLMapping.objects.for_url(request.get_full_path())
             self.handle = handle_url_mapping.handle_name

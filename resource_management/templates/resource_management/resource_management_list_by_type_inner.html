@@ -1,59 +1,82 @@
 {% load static %}
 {% load project_tags %}
-<table class="table table-hover resource-management-table">
-    <thead>
-        <tr>
-            <th id="name">Name</th>
-            <th id="updated-by">Updated by</th>
-            <th id="actions">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for resource in resource_list %}
-        <tr>
-            <td headers="name">
-                {{ resource.name|default:resource.localid }}
-            </td>
-            <td headers="updated-by">
-                {{ institution_members_by_id|get_key_value:resource.owner_id|default:'Unknown' }}
-            </td>
-            <td headers="actions">
-                <div class="action-buttons">
-                    <a href="{% url resource_xml_download_page_url_name resource.pk %}" class="btn btn-light btn-view-xml" title="View">
-                        <img src="{% static 'view-file.svg' %}" alt="View">
-                    </a>
-                    <div class="dropdown">
-                        <button class="btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+<div class="table-responsive">
+    <table class="table table-hover resource-management-table">
+        <thead>
+            <tr>
+                <th id="name">Name</th>
+                <th id="updated-by">Updated by</th>
+                <th id="actions">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resource in resource_list %}
+            <tr>
+                <td headers="name">
+                    <div>{{ resource.name|default:resource.localid }}</div>
+                    <small class="text-secondary">{{ resource.localid }}, {{ resource.namespace }}</small>
+                </td>
+                <td headers="updated-by">
+                    {{ institution_members_by_id|get_key_value:resource.owner_id|default:'Unknown' }}
+                </td>
+                <td headers="actions">
+                    <div class="action-buttons">
+                        <a href="{% url resource_xml_download_page_url_name resource.pk %}" class="btn btn-light btn-view-xml fs-5" title="View/Download">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16" alt="View/Download">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                             </svg>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-item-container-view-xml">
-                                <a href="{% url resource_xml_download_page_url_name resource.pk %}" class="dropdown-item">View</a>
-                            </li>
-                            <li>
-                                <a href="{% url resource_update_page_url_name resource.pk %}" class="dropdown-item">Upload a New XML File</a>
-                            </li>
-                            <li>
-                                {% if interaction_method_update_page_url_name %}
-                                <a href="{% url interaction_method_update_page_url_name resource.pk %}" class="dropdown-item">Update Interaction Methods</a>
-                                {% endif %}
-                            </li>
-                            <li>
-                                <a href="{% url resource_delete_page_url_name resource.pk %}" class="dropdown-item text-danger">Delete...</a>
-                            </li>
-                        </ul>
+                        </a>
+                        <div class="dropdown position-static">
+                            <button class="btn btn-light fs-5" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="More options">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                                </svg>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item-container-view-xml">
+                                    <a href="{% url resource_xml_download_page_url_name resource.pk %}" class="dropdown-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download me-3" viewBox="0 0 16 16" alt="View/Download">
+                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                        </svg>
+                                        View/Download
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url resource_update_page_url_name resource.pk %}" class="dropdown-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload me-3" viewBox="0 0 16 16">
+                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                                        </svg>
+                                        Update...
+                                    </a>
+                                </li>
+                                <li>
+                                    {% if interaction_method_update_page_url_name %}
+                                    <a href="{% url interaction_method_update_page_url_name resource.pk %}" class="dropdown-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill me-3" viewBox="0 0 16 16">
+                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                        </svg>
+                                        Update Interaction Methods
+                                    </a>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    <a href="{% url resource_delete_page_url_name resource.pk %}" class="dropdown-item text-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash me-3" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                        </svg>
+                                        Delete...
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    {% comment %} <button class="btn btn-light">
-                        <img src="{% static 'update-file.svg' %}" alt="View" style="width: 1.5rem;">
-                    </button>
-                    <button class="btn btn-light">
-                        <img src="{% static 'delete-file.svg' %}" alt="View" style="width: 1.5rem;">
-                    </button> {% endcomment %}
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

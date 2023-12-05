@@ -14,10 +14,12 @@
 <script src="{% static "update/update_interaction_methods.js" %}" type="module" defer></script>
 {% endblock scripts %}
 {% block content %}
-<h1>{{ title }}</h1>
-<div class="text-muted mb-4">
-    Data Collection: <b>{{ data_collection.name|default:data_collection.identifier.PITHIA_Identifier.localID }}</b>
-</div>
+<hgroup>
+    <h1 class="mb-0">{{ title }}</h1>
+    <p class="text-secondary fs-3">
+        {{ data_collection.name|default:data_collection.identifier.PITHIA_Identifier.localID }}
+    </p>
+</hgroup>
 <div class="row mb-3">
     <div class="col-lg-8">
         <p>Select and fill out the interaction method details you would like to add for <b>{{ data_collection.name|default:data_collection.identifier.PITHIA_Identifier.localID }}</b> below, then click <b>Save</b> to save your changes.</p>

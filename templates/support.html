@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load project_tags %}
+{% block breadcrumbs %}
+{% breadcrumb_item_active title %}
+{% endblock breadcrumbs %}
+{% block content %}
+<h1>{{ title }}</h1>
+<p class="support-page-description">
+    The e-Science Centre uses the <a href="https://ggus.eu/">GGUS helpdesk</a>
+    service for submitting and managing technical support queries. You will need to create or log
+    in to your EGI Check-in account before starting your ticket.
+</p>
+<a href="https://ggus.eu/index.php?mode=ticket_submit" target="_blank" class="btn btn-primary fw-bold mt-3">
+    Submit ticket
+</a>
+<div class="alert alert-primary d-flex align-items-center justify-content-between my-5" style="column-gap: 1rem;">
+    <em>
+        If this is your first time submitting a ticket, please ensure that you have read the
+        <a href="#before-submitting-a-ticket-heading">instructions below</a>.
+    </em>
+    <a href="#before-submitting-a-ticket-heading" class="fs-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16" alt="Instructions below">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"></path>
+        </svg>
+    </a>
+</div>
+<article>
+    <h2 id="before-submitting-a-ticket-heading" class="mb-3">Before Submitting a Ticket</h2>
+    <div class="row">
+        <div class="col-lg-6">
+            <section>
+                <h3>Important</h3>
+                <ol>
+                    <li>
+                        <p>
+                            Make sure to assign the ticket to the "PITHIA e-Science Centre" support unit as
+                            we will not receive a notification of your ticket otherwise, and, due to how
+                            GGUS Helpdesk works, may also not be able to classify your ticket in the future.
+                        </p>
+                        <p>
+                            <small>
+                                The support unit can be assigned from the provided dropdown menu for the <em>Assign
+                                to support unit</em> field in the bottom-right of the ticket form, within the "PITHIA
+                                Community" dropdown group.
+                            </small>
+                        </p>
+                        <img src="{% static 'ggus_ticket_form_assign_su.png' %}" class="w-100" style="max-width: 20rem;" alt="A cropped screenshot of the GGUS ticket form showing the 'PITHIA e-Science Centre' support unit option highlighted within the dropdown menu for the 'Assign to support unit' field.">
+                    </li>
+                </ol>
+            </section>
+            <section>
+                <h3>Suggestions</h3>
+                <ol>
+                    <li value="2">
+                        Attaching relevant files (e.g., a file that failed metadata validation) or screenshots of
+                        your problem will help us to better understand and provide a more informed response to your
+                        ticket.
+                    </li>
+                </ol>
+            </section>
+        </div>
+        <div class="col-lg-6">
+            <img src="{% static 'ggus_ticket_form_annotated.png' %}" class="img-fluid" alt="A screenshot of the GGUS ticket form with two red boxes highlighting key sections of the form. The first red box, labelled '1', highlights the 'Assign to support unit' field. The second red box, labelled '2', highlights the file input fields.">
+        </div>
+    </div>
+</article>
+{% endblock content %}

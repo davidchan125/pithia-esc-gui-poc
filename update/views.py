@@ -121,7 +121,7 @@ class ResourceUpdateFormView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f'Update {self.model.a_or_an} {self.model.type_readable.title()}'
+        context['title'] = f'Update Scientific Metadata'
         context['form'] = self.form_class
         context['resource'] = self.resource
         context['resource_id'] = self.resource_id
@@ -271,11 +271,6 @@ class AcquisitionCapabilitiesUpdateFormView(ResourceUpdateFormView):
     resource_mongodb_model = CurrentAcquisitionCapability
     resource_revision_mongodb_model = AcquisitionCapabilityRevision
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = f'Update {self.model.type_readable.title()}'
-        return context
-
     def post(self, request, *args, **kwargs):
         self.resource_conversion_validate_and_correct_function = correct_acquisition_capability_set_xml_converted_to_dict
         return super().post(request, *args, **kwargs)
@@ -307,11 +302,6 @@ class ComputationCapabilitiesUpdateFormView(ResourceUpdateFormView):
     # TODO: remove old code
     resource_mongodb_model = CurrentComputationCapability
     resource_revision_mongodb_model = ComputationCapabilityRevision
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = f'Update {self.model.type_readable.title()}'
-        return context
 
     def post(self, request, *args, **kwargs):
         self.resource_conversion_validate_and_correct_function = correct_computation_capability_set_xml_converted_to_dict

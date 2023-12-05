@@ -15,6 +15,20 @@ from .services import (
 )
 
 from common import models
+from common.test_setup import (
+    register_acquisition_capabilities_for_test,
+    register_acquisition_for_test,
+    register_computation_capabilities_for_test,
+    register_computation_for_test,
+    register_data_collection_for_test,
+    register_individual_for_test,
+    register_instrument_for_test,
+    register_operation_for_test,
+    register_organisation_for_test,
+    register_platform_for_test,
+    register_process_for_test,
+    register_project_for_test,
+)
 from pithiaesc.settings import BASE_DIR
 
 
@@ -23,42 +37,19 @@ _XML_METADATA_FILE_DIR = os.path.join(BASE_DIR, 'common', 'test_files', 'xml_met
 # Create your tests here.
 class SimpleSearchTestCase(TestCase):
     def setUp(self) -> None:
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Organisation_Test.xml')) as xml_file:
-            self.organisation = models.Organisation.objects.create_from_xml_string(xml_file.read())
-            
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Individual_Test.xml')) as xml_file:
-            self.individual = models.Individual.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Project_Test.xml')) as xml_file:
-            self.project = models.Project.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Platform_Test.xml')) as xml_file:
-            self.platform = models.Platform.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Operation_Test.xml')) as xml_file:
-            self.operation = models.Operation.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Instrument_Test.xml')) as xml_file:
-            self.instrument = models.Instrument.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'AcquisitionCapabilities_Test.xml')) as xml_file:
-            self.acquisition_capabilities = models.AcquisitionCapabilities.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Acquisition_Test.xml')) as xml_file:
-            self.acquisition = models.Acquisition.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'Computation_Test.xml')) as xml_file:
-            self.computation_capabilities = models.ComputationCapabilities.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'ComputationCapabilities_Test.xml')) as xml_file:
-            self.computation = models.Computation.objects.create_from_xml_string(xml_file.read())
-
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'CompositeProcess_Test.xml')) as xml_file:
-            self.process = models.Process.objects.create_from_xml_string(xml_file.read())
-            
-        with open(os.path.join(_XML_METADATA_FILE_DIR, 'DataCollection_Test.xml')) as xml_file:
-            self.data_collection = models.DataCollection.objects.create_from_xml_string(xml_file.read())
-
+        self.organisation = register_organisation_for_test()
+        self.individual = register_individual_for_test()
+        self.project = register_project_for_test()
+        self.platform = register_platform_for_test()
+        self.operation = register_operation_for_test()
+        self.instrument = register_instrument_for_test()
+        self.acquisition_capabilities = register_acquisition_capabilities_for_test()
+        self.acquisition = register_acquisition_for_test()
+        self.computation_capabilities = register_computation_capabilities_for_test()
+        self.computation = register_computation_for_test()
+        self.process = register_process_for_test()
+        self.data_collection = register_data_collection_for_test()
+        
         return super().setUp()
 
     

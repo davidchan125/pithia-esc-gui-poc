@@ -1,6 +1,7 @@
 import base64
 import hashlib
 import json
+import logging
 import os
 import random
 import uuid
@@ -38,6 +39,8 @@ from pithiaesc.settings import BASE_DIR
 
 JOIN_AN_INSTITUTION_PAGE_TITLE = 'Join a PITHIA Institution'
 
+logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 
@@ -49,20 +52,25 @@ def perun_login_required(function):
     def wrap(request, *args, **kwargs):
         auth = request.headers.get('Authorization')
 
-        if not auth:
-            return JsonResponse({'msg': 'Please login!'}, status=400)
-        
-        if not auth.startswith('Bearer'):
-            return JsonResponse({'msg': 'Header does not start with \'Bearer\'.'}, status=400)
+        try:
+            if not auth:
+                return JsonResponse({'msg': 'Please login!'}, status=400)
+            
+            if not auth.startswith('Bearer'):
+                return JsonResponse({'msg': 'Header does not start with \'Bearer\'.'}, status=400)
 
-        token = auth[7:]
-        username = request.session.get(token)
+            token = auth[7:]
+            username = request.session.get(token)
 
-        if not username:
-            return JsonResponse({'msg': 'Invalid token!'}, status=401)
+            if not username:
+                return JsonResponse({'msg': 'Invalid token!'}, status=401)
 
-        if username != os.environ['PERUN_USERNAME']:
-            return JsonResponse({'msg': 'The perun info has been deleted by the admin.'}, status=401)
+            if username != os.environ['PERUN_USERNAME']:
+                return JsonResponse({'msg': 'The perun info has been deleted by the admin.'}, status=401)
+        except BaseException as e:
+            error_msg = 'Unable to process authorisation due to an unknown error.'
+            logger.exception(error_msg)
+            return JsonResponse({'msg': error_msg}, status=500)
 
         return function(request, *args, **kwargs)
 
@@ -74,20 +82,26 @@ def perun_login_required(function):
 def perun_login(request):
     incorrect_login_msg = 'The username or password for Perun is wrong.'
 
-    # Verify username
-    username = request.POST.get('username', None)
-    if username != os.environ['PERUN_USERNAME']:
-        return JsonResponse({'msg': incorrect_login_msg}, status=400)
-    
-    # Verify password
-    password = request.POST.get('password', None)
-    hashed_password = hashlib.sha512(password.encode('utf-8')).hexdigest()
-    if hashed_password != os.environ['PERUN_PASSWORD']:
-        return JsonResponse({'msg': incorrect_login_msg}, status=400)
-    
-    # Set session token if login details are correct.
-    token = str(uuid.uuid4()).replace('-', '') + str(random.randint(0, 1000))
-    request.session[token] = username
+    try:
+        # Verify username
+        username = request.POST.get('username', None)
+        if username != os.environ['PERUN_USERNAME']:
+            return JsonResponse({'msg': incorrect_login_msg}, status=400)
+        
+        # Verify password
+        password = request.POST.get('password', None)
+        hashed_password = hashlib.sha512(password.encode('utf-8')).hexdigest()
+        if hashed_password != os.environ['PERUN_PASSWORD']:
+            return JsonResponse({'msg': incorrect_login_msg}, status=400)
+        
+        # Set session token if login details are correct.
+        token = str(uuid.uuid4()).replace('-', '') + str(random.randint(0, 1000))
+        request.session[token] = username
+    except BaseException as e:
+        error_msg = 'Unable to login due to an unexpected error.'
+        logger.exception(error_msg)
+        return JsonResponse({'msg': error_msg}, status=500)
+
     return JsonResponse({'msg': 'Login succeeded!', 'token': token}, status=200)
 
 @csrf_exempt
@@ -173,15 +187,21 @@ def update_perun_organisation_list(request):
     #     return JsonResponse({'msg': 'The username or password for perun is wrong.'}, status=400)
 
     # If the details are correct, decode the data.
-    decompressed_data = zlib.decompress(request.body, 16+zlib.MAX_WBITS)
-    decompressed_data_string = decompressed_data.replace(b'\x00', b'').decode('ascii')
-    index_first_curly_bracket = decompressed_data_string.index('{')
-    index_last_curly_bracket = decompressed_data_string.rfind('}') 
-    update_data = json.loads(decompressed_data_string[index_first_curly_bracket:index_last_curly_bracket + 1])
-    
-    # Store the update by overwriting the locally stored JSON file.
-    with open(os.path.join(BASE_DIR, 'perun', 'ListOfOrganisations.json'), 'w') as organisation_list_file:
-        json.dump(update_data, organisation_list_file)
+    try:
+        decompressed_data = zlib.decompress(request.body, 16+zlib.MAX_WBITS)
+        decompressed_data_string = decompressed_data.replace(b'\x00', b'').decode('ascii')
+        index_first_curly_bracket = decompressed_data_string.index('{')
+        index_last_curly_bracket = decompressed_data_string.rfind('}') 
+        update_data = json.loads(decompressed_data_string[index_first_curly_bracket:index_last_curly_bracket + 1])
+        
+        # Store the update by overwriting the locally stored JSON file.
+        with open(os.path.join(BASE_DIR, 'perun', 'ListOfOrganisations.json'), 'w') as organisation_list_file:
+            json.dump(update_data, organisation_list_file)
+    except BaseException as e:
+        error_msg = 'Encountered an unexpected error when trying to update ListOfOrganisations.json.'
+        logger.exception(error_msg)
+        return JsonResponse({'msg': error_msg}, status=500)
+        
     return HttpResponse(status=200)
 
 

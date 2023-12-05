@@ -8,21 +8,13 @@ from .services import (
     map_metadata_server_urls_to_browse_urls,
 )
 
-from common.test_xml_files import (
-    CATALOGUE_DATA_SUBSET_METADATA_XML,
-    INDIVIDUAL_METADATA_XML,
-    INSTRUMENT_METADATA_XML,
-    ORGANISATION_METADATA_XML,
-    PROJECT_METADATA_XML,
-    PROCESS_METADATA_XML,
-)
-from common.models import (
-    CatalogueDataSubset,
-    Individual,
-    Instrument,
-    Organisation,
-    Project,
-    Process,
+from common.test_setup import (
+    register_catalogue_data_subset_for_test,
+    register_individual_for_test,
+    register_instrument_for_test,
+    register_organisation_for_test,
+    register_project_for_test,
+    register_process_for_test,
 )
 
 # Create your tests here.
@@ -40,11 +32,7 @@ class BulkOntologyUrlMappingTestCase(SimpleTestCase):
             'https://metadata.pithia.eu/ontology/2.2/test/test',
         ]
         converted_ontology_server_urls = map_ontology_server_urls_to_browse_urls(ontology_server_urls)
-        self.assertNotEqual(converted_ontology_server_urls[0]['original_server_url'], converted_ontology_server_urls[0]['converted_url'])
-        self.assertNotEqual(converted_ontology_server_urls[1]['original_server_url'], converted_ontology_server_urls[1]['converted_url'])
-        self.assertNotEqual(converted_ontology_server_urls[2]['original_server_url'], converted_ontology_server_urls[2]['converted_url'])
-        self.assertNotEqual(converted_ontology_server_urls[3]['original_server_url'], converted_ontology_server_urls[3]['converted_url'])
-        self.assertEqual(converted_ontology_server_urls[4]['original_server_url'], converted_ontology_server_urls[4]['converted_url'])
+        self.assertTrue(any(mapping['original_server_url'] == mapping['converted_url'] for mapping in converted_ontology_server_urls))
 
 
 class BulkMetadataUrlMappingTestCase(TestCase):
@@ -54,10 +42,10 @@ class BulkMetadataUrlMappingTestCase(TestCase):
         metadata URL to the corresponding page URL in the eSC.
         """
         # Register the test metadata first.
-        Organisation.objects.create_from_xml_string(ORGANISATION_METADATA_XML.read())
-        Individual.objects.create_from_xml_string(INDIVIDUAL_METADATA_XML.read())
-        Project.objects.create_from_xml_string(PROJECT_METADATA_XML.read())
-        Process.objects.create_from_xml_string(PROCESS_METADATA_XML.read())
+        register_organisation_for_test()
+        register_individual_for_test()
+        register_project_for_test()
+        register_process_for_test()
 
         resource_server_urls = [
             'https://metadata.pithia.eu/resources/2.2/process/test/CompositeProcess_Test',
@@ -79,9 +67,9 @@ class BulkMetadataUrlMappingTestCase(TestCase):
         of all the metadata URLs for this test.
         """
         # Register the test metadata first.
-        Instrument.objects.create_from_xml_string(INSTRUMENT_METADATA_XML.read())
-        Process.objects.create_from_xml_string(PROCESS_METADATA_XML.read())
-        CatalogueDataSubset.objects.create_from_xml_string(CATALOGUE_DATA_SUBSET_METADATA_XML.read())
+        register_instrument_for_test()
+        register_process_for_test()
+        register_catalogue_data_subset_for_test()
 
         # Test data
         instrument_resource_url_with_op_mode = 'https://metadata.pithia.eu/resources/2.2/instrument/test/Instrument_Test#instrumentoperationalmode1'

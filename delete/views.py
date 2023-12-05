@@ -100,7 +100,7 @@ class ResourceDeleteView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f'Delete Metadata Confirmation'
+        context['title'] = f'Delete Scientific Metadata'
         context['resource_id'] = self.resource_id
         context['resource_to_delete'] = self.resource_to_delete
         context['other_resources_to_delete'] = self.other_resources_to_delete

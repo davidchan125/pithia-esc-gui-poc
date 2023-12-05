@@ -15,8 +15,10 @@ jsonschema-path==0.3.1
 jsonschema-specifications==2023.7.1
 lazy-object-proxy==1.9.0
 lxml==4.9.3
+mongomock==4.1.2
 openapi-schema-validator==0.6.2
 openapi-spec-validator==0.7.1
+packaging==23.2
 pathable==0.4.3
 psycopg2-binary==2.9.9
 pyhandle==1.2.1
@@ -31,6 +33,7 @@ referencing==0.30.2
 requests==2.31.0
 rfc3339-validator==0.1.4
 rpds-py==0.10.6
+sentinels==1.0.0
 six==1.16.0
 sqlparse==0.4.4
 typing_extensions==4.8.0

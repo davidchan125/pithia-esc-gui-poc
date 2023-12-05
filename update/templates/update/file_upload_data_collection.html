@@ -2,6 +2,7 @@
 {% load project_tags %}
 {% block breadcrumbs %}
 {% breadcrumb_item resource_management_index_page_breadcrumb_text 'resource_management:index' %}
+{% breadcrumb_item resource_management_category_list_page_breadcrumb_text resource_management_category_list_page_breadcrumb_url_name %}
 {% breadcrumb_item resource_management_list_page_breadcrumb_text resource_management_list_page_breadcrumb_url_name %}
 {% breadcrumb_item_active title %}
 {% endblock breadcrumbs %}
@@ -14,8 +15,8 @@
 {% endblock scripts %}
 {% block title %}
 <hgroup>
-    <h1>{{ title }}</h1>
-    <p class="text-secondary">Updating: {{ resource.name }}</p>
+    <h1 class="mb-0">{{ title }}</h1>
+    <p class="text-secondary fs-3">{{ resource.name }}</p>
 </hgroup>
 {% endblock title %}
 {% block page_description %}

@@ -50,3 +50,8 @@ def privacy_policy(request):
     return render(request, 'privacy-policy.html', {
         'title': 'PITHIA e-Science Centre Privacy Policy'
     })
+
+def support(request):
+    return render(request, 'support.html', {
+    'title': 'Support'
+    })

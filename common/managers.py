@@ -205,7 +205,9 @@ class APIInteractionMethodManager(models.Manager):
             config=config,
             owner=0
         )
-        return interaction_method.save(using=os.environ['DJANGO_RW_DATABASE_NAME'])
+        interaction_method.save(using=os.environ['DJANGO_RW_DATABASE_NAME'])
+
+        return interaction_method
 
     def update_config(self, interaction_method_id, specification_url: str, description: str = ''):
         interaction_method = self.get_queryset().get(pk=interaction_method_id)

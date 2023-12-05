@@ -15,6 +15,7 @@ urlpatterns = [
     path('data-resource-registration-guide', views.resource_registration_user_guide, name='resource_registration_user_guide'),
     path('terms-of-use', views.terms_of_use, name='terms_of_use'),
     path('privacy-policy', views.privacy_policy, name='privacy_policy'),
+    path('support', views.support, name='support'),
     path('authorised/', include('pithiaesc.secure_urls')),
     path('', include('user_management.urls')),
 ]

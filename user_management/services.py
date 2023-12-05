@@ -1,8 +1,9 @@
 import json
 import os
 import requests
-from pathlib import Path
 from urllib.parse import unquote
+
+from pithiaesc.settings import BASE_DIR
 
 # Used in the main menu. Used as the base link for creating new institutions.
 CREATION_URL_BASE = 'https://perun.egi.eu/egi/registrar/?vo=vo.esc.pithia.eu&group=organizationRequests'
@@ -112,7 +113,7 @@ def get_members_by_institution_id(institution_id):
     members = []
     perun_data = None
     try:
-        with open(os.path.join(Path.home(), 'ListOfOrganisations.json')) as organisation_list_file:
+        with open(os.path.join(BASE_DIR, 'perun', 'ListOfOrganisations.json')) as organisation_list_file:
             perun_data = json.loads(organisation_list_file.read())
     except FileNotFoundError:
         return members

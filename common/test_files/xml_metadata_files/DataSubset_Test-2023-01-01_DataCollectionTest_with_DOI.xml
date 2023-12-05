@@ -20,7 +20,7 @@
         </PITHIA_Identifier>
     </identifier>
     <entryIdentifier
-        xlink:href="https://metadata.pithia.eu/resources/2.2/catalogue/test/Test/CatalogueEntry_Test-2023-01-01" />
+        xlink:href="https://metadata.pithia.eu/resources/2.2/catalogue/test/Test/CatalogueEntry_Test_2023-01-01" />
     <dataSubsetName>Test</dataSubsetName>
     <dataSubsetDescription>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut

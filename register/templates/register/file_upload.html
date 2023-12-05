@@ -16,7 +16,10 @@
 <div class="row flex-wrap gx-md-5 gy-5 pb-4">
     <div class="col-lg-8">
         {% block title %}
-        <h1>{{ title }}</h1>
+        <hgroup>
+            <h1 class="mb-0">{{ title }}</h1>
+            <p class="text-secondary fs-3">{{ resource_type_plural_readable }}</p>
+        </hgroup>
         {% endblock title %}
         <form action="{{ post_url }}" method="post" enctype="multipart/form-data" id="file-upload-form">
             {% csrf_token %}
@@ -29,7 +32,7 @@
                 </ul>
                 {% endif %}
                 <div class="file-upload-container mb-3">
-                    {{ form.files.label_tag }}
+                    <div class="fs-5">{{ form.files.label_tag }}</div>
                     {{ form.files }}
                     <div class="d-flex justify-content-between flex-wrap">
                         <small class="form-text">Supported file types: XML</small>

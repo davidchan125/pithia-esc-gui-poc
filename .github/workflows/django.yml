@@ -15,6 +15,18 @@ jobs:
       matrix:
         python-version: [ "3.10" ]
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: default
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -28,14 +40,14 @@ jobs:
     - name: Create and populate .env file
       env:
         SECRET_KEY: tlR922803zw9IDmFMHXLqd5sn6WfJSKDRYxdEe_l7ZQ
-        DATABASE_ENGINE: django.db.backends.sqlite3
-        DATABASE_NAME: test
-        DATABASE_READ_USER: test
-        DATABASE_READ_PASSWORD: test
-        DATABASE_HOST: test
-        DATABASE_PORT: test
-        DATABASE_WRITE_USER: test
-        DATABASE_WRITE_PASSWORD: test
+        DATABASE_ENGINE: django.db.backends.postgresql
+        DATABASE_NAME: default
+        DATABASE_READ_USER: postgres
+        DATABASE_READ_PASSWORD: postgres
+        DATABASE_WRITE_USER: postgres
+        DATABASE_WRITE_PASSWORD: postgres
+        DATABASE_HOST: 127.0.0.1
+        DATABASE_PORT: 5432
         MONGODB_CONNECTION_STRING: mongodb://localhost:27017
         DB_NAME: test
         DJANGO_RW_DATABASE_NAME: default
@@ -58,4 +70,5 @@ jobs:
         cat pithiaesc/.env
     - name: Verify Organisation XSD validation unit test passes
       run: |
+        python manage.py test --exclude-tag=slow --exclude-tag=manual
         python manage.py test validation.tests.OrganisationXSDValidationTestCase
